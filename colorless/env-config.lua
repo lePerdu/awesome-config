@@ -7,8 +7,11 @@ local gears = require("gears")
 local beautiful = require("beautiful")
 local wibox = require("wibox")
 local naughty = require("naughty")
+local menu_utils = require("menubar.utils")
 
 local redflat = require("redflat")
+
+local unpack = unpack or table.unpack
 
 -- Initialize tables and vars for module
 -----------------------------------------------------------------------------------------------------------------------
@@ -32,6 +35,15 @@ function env:init(args)
 	self.sloppy_focus = false
 	self.color_border = false
 	self.set_slave = true
+
+    self.shutdown_cmd = args.shutdown_cmd or "systemctl poweroff"
+    self.reboot_cmd = args.reboot_cmd or "systemctl reboot"
+    self.suspend_cmd = args.suspend_cmd or "systemctl suspend"
+    self.hibernate_cmd = args.hibernate_cmd or "systemctl hibernate"
+    self.lock_cmd = args.lock_cmd or "xautolock -locknow"
+
+    awful.util.terminal = self.terminal
+    menu_utils.terminal = self.terminal
 
 	-- theme setup
 	beautiful.init(env.themedir .. "/theme.lua")

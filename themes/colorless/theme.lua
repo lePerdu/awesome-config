@@ -2,6 +2,7 @@
 --                                                Colorless theme                                                    --
 -----------------------------------------------------------------------------------------------------------------------
 local awful = require("awful")
+local menu_utils = require("menubar.utils")
 
 local theme = {}
 --local wa = mouse.screen.workarea
@@ -36,9 +37,10 @@ theme.homedir = os.getenv("HOME")
 
 theme.panel_height        = 36 -- panel height
 theme.border_width        = 4  -- window border width
-theme.useless_gap         = 4  -- useless gap
+theme.useless_gap         = 2  -- useless gap
 
-theme.wallpaper = theme.path .. "/wallpaper/primary.png" -- wallpaper file
+theme.wallpaper = theme.path .. "/wallpaper/badlands-full.jpg" -- wallpaper file
+theme.icon_theme = "Paper"
 
 -- Fonts
 ------------------------------------------------------------
@@ -75,6 +77,14 @@ theme.icon = {
 	blank    = theme.path .. "/common/blank.svg",
 	warning  = theme.path .. "/common/warning.svg",
 	awesome  = theme.path .. "/common/awesome.svg",
+}
+
+-- Widget icons
+--------------------------------------------------------------------------------
+theme.icon.widget = {
+	battery  = theme.path .. "/widget/battery.svg",
+	wireless = theme.path .. "/widget/wireless.svg",
+	monitor  = theme.path .. "/widget/monitor.svg",
 }
 
 -- Service utils config
@@ -162,7 +172,7 @@ theme.menu.color = {
 
 -- Gauge style
 -----------------------------------------------------------------------------------------------------------------------
-theme.gauge = { tag = {}, task = {}, graph = {}}
+theme.gauge = { tag = {}, task = {}, graph = {}, monitor = {}, icon = {}, audio = {}}
 
 -- Separator
 ------------------------------------------------------------
@@ -201,7 +211,52 @@ theme.gauge.graph.dots = {
 	row_num      = 3,
 	dot_size     = 5,
 	dot_gap_h    = 4,
-	color        = theme.color
+    color        = {
+        main   = theme.color.main,
+        gray   = theme.color.icon,
+        urgent = theme.color.urgent,
+    }
+}
+
+-- Monitor
+theme.gauge.monitor.dash = {
+	width    = 10,
+	line     = { num = 5, width = 3 },
+	color    = {
+        main   = theme.color.main,
+        gray   = theme.color.icon,
+        urgent = theme.color.urgent,
+    }
+}
+
+-- Icon indicator
+------------------------------------------------------------
+theme.gauge.icon.single = {
+	color  = theme.color
+}
+
+-- Double icon indicator (for network)
+--------------------------------------------------------------
+theme.gauge.icon.double = {
+	icon1       = theme.path .. "/widget/down.svg",
+	icon2       = theme.path .. "/widget/up.svg",
+	is_vertical = true,
+	igap        = -6,
+    color       = theme.color
+}
+
+-- Volume indicator
+------------------------------------------------------------
+theme.gauge.audio.red = {
+	icon = {
+		ready = theme.path .. "/widget/audio.svg",
+		mute  = theme.path .. "/widget/mute.svg"
+	},
+	color = {
+		main = theme.color.main,
+		icon = theme.color.icon,
+		mute = theme.color.gray,
+	}
 }
 
 
@@ -217,6 +272,11 @@ theme.widget.wrapper = {
 	textclock   = { 12, 12, 0, 0 },
 	taglist     = { 4, 4, 0, 0 },
 	tray        = { 10, 12, 7, 7 },
+	volume      = { 12, 10, 3, 3 },
+	network     = { 6, 6, 8, 8 },
+	cpu         = { 10, 2, 8, 8 },
+	ram         = { 2, 10, 8, 8 },
+	battery     = { 8, 10, 7, 7 },
 	-- tasklist    = { 0, 70, 0, 0 }, -- centering tasklist widget
 }
 
@@ -333,9 +393,19 @@ theme.widget.tasklist.winmenu.icon = {
 
 -- task aliases
 theme.widget.tasklist.appnames = {}
-theme.widget.tasklist.appnames["Firefox"             ] = "FIFOX"
-theme.widget.tasklist.appnames["Gnome-terminal"      ] = "GTERM"
+theme.widget.tasklist.appnames["Termite"             ] = "TERM"
+theme.widget.tasklist.appnames["Chromium"            ] = "CHROM"
+theme.widget.tasklist.appnames["Galculator"          ] = "GALC"
 
+-- Volume notification
+theme.widget.alsa = {
+	notify = { icon = theme.path .. "/widget/audio.svg" }
+}
+
+-- Brightness notification
+theme.widget.brightness = {
+	notify = { icon = theme.path .. "/widget/brightness.svg" }
+}
 
 -- Floating widgets
 -----------------------------------------------------------------------------------------------------------------------

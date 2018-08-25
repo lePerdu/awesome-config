@@ -24,10 +24,10 @@ rules.floating_any = {
 	instance = { "DTA", "copyq", },
 	class = {
 		"Arandr", "Gpick", "Kruler", "MessageWin", "Sxiv", "Wpa_gui", "pinentry", "veromix",
-		"xtightvncviewer"
+		"xtightvncviewer", "Galculator", "TilEm",
 	},
 	name = { "Event Tester", },
-	role = { "AlarmWindow", "pop-up", }
+	role = { "AlarmWindow", "pop-up", },
 }
 
 
@@ -55,6 +55,59 @@ function rules:init(args)
 			rule_any   = { type = { "normal", "dialog" }},
 			properties = { titlebars_enabled = true }
 		},
+        {
+            rule_any = {
+                class = {
+                    "Termite", "urxvt", "kitty", "alacritty", "xterm",
+                    "ranger",
+                }
+            },
+            properties = { tag = "Term" }
+        },
+        {
+            rule_any = {
+                class = {
+                    "Chromium", "Luakit", "Firefox",
+                }
+            },
+            properties = { tag = "Web" }
+        },
+        {
+            rule_any = {
+                class = {
+                    "Zathura", "GThumb", "Xournal", "Feh",
+                    "Pavucontrol",
+                }
+            },
+            properties = { tag = "Media" }
+        },
+        {
+            rule_any = {
+                class = {
+                    "Virt-manager",
+                },
+                name = {
+                    "QEMU"
+                }
+            },
+            properties = { tag = "VM" }
+        },
+        {
+            rule_any = {
+                class = {
+                    "Chromium", "Luakit", "Firefox",
+                }
+            },
+            properties = { tag = "Web" }
+        },
+        {
+            rule_any = {
+                class = {
+                    "Spotify", "qikea", "qikec",
+                }
+            },
+            properties = { tag = "BG" }
+        },
 	}
 
 

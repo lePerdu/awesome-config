@@ -92,6 +92,14 @@ local function client_numkey(i, mod, action)
 end
 
 
+-- Miscellaneous utility functions
+-----------------------------------------------------------------------------------------------------------------------
+
+local function brightness(args)
+    redflat.float.brightness:change_with_xbacklight(args)
+end
+
+
 -- Build hotkeys depended on config parameters
 -----------------------------------------------------------------------------------------------------------------------
 function hotkeys:init(args)
@@ -112,42 +120,42 @@ function hotkeys:init(args)
 	--------------------------------------------------------------------------------
 	-- this is exaple for layouts hotkeys setup, see other color configs for more
 
-	-- local layout_tile = {
-	-- 	{
-	-- 		{ env.mod }, "l", function () awful.tag.incmwfact( 0.05) end,
-	-- 		{ description = "Increase master width factor", group = "Layout" }
-	-- 	},
-	-- 	{
-	-- 		{ env.mod }, "j", function () awful.tag.incmwfact(-0.05) end,
-	-- 		{ description = "Decrease master width factor", group = "Layout" }
-	-- 	},
-	-- 	{
-	-- 		{ env.mod }, "i", function () awful.client.incwfact( 0.05) end,
-	-- 		{ description = "Increase window factor of a client", group = "Layout" }
-	-- 	},
-	-- 	{
-	-- 		{ env.mod }, "k", function () awful.client.incwfact(-0.05) end,
-	-- 		{ description = "Decrease window factor of a client", group = "Layout" }
-	-- 	},
-	-- 	{
-	-- 		{ env.mod, }, "+", function () awful.tag.incnmaster( 1, nil, true) end,
-	-- 		{ description = "Increase the number of master clients", group = "Layout" }
-	-- 	},
-	-- 	{
-	-- 		{ env.mod }, "-", function () awful.tag.incnmaster(-1, nil, true) end,
-	-- 		{ description = "Decrease the number of master clients", group = "Layout" }
-	-- 	},
-	-- 	{
-	-- 		{ env.mod, "Control" }, "+", function () awful.tag.incncol( 1, nil, true) end,
-	-- 		{ description = "Increase the number of columns", group = "Layout" }
-	-- 	},
-	-- 	{
-	-- 		{ env.mod, "Control" }, "-", function () awful.tag.incncol(-1, nil, true) end,
-	-- 		{ description = "Decrease the number of columns", group = "Layout" }
-	-- 	},
-	-- }
+	local layout_tile = {
+		{
+			{ env.mod }, "h", function () awful.tag.incmwfact(-0.05) end,
+			{ description = "Decrease master width factor", group = "Layout" }
+		},
+		{
+			{ env.mod }, "j", function () awful.client.incwfact(-0.05) end,
+			{ description = "Decrease window factor of a client", group = "Layout" }
+		},
+		{
+			{ env.mod }, "k", function () awful.client.incwfact( 0.05) end,
+			{ description = "Increase window factor of a client", group = "Layout" }
+		},
+		{
+			{ env.mod }, "l", function () awful.tag.incmwfact( 0.05) end,
+			{ description = "Increase master width factor", group = "Layout" }
+		},
+		{
+			{ env.mod, }, "+", function () awful.tag.incnmaster( 1, nil, true) end,
+			{ description = "Increase the number of master clients", group = "Layout" }
+		},
+		{
+			{ env.mod }, "-", function () awful.tag.incnmaster(-1, nil, true) end,
+			{ description = "Decrease the number of master clients", group = "Layout" }
+		},
+		{
+			{ env.mod, "Control" }, "+", function () awful.tag.incncol( 1, nil, true) end,
+			{ description = "Increase the number of columns", group = "Layout" }
+		},
+		{
+			{ env.mod, "Control" }, "-", function () awful.tag.incncol(-1, nil, true) end,
+			{ description = "Decrease the number of columns", group = "Layout" }
+		},
+	}
 
-	-- laycom:set_keys(layout_tile, "tile")
+	laycom:set_keys(layout_tile, "tile")
 
 	-- Keys for widgets
 	--------------------------------------------------------------------------------
@@ -156,11 +164,11 @@ function hotkeys:init(args)
 	------------------------------------------------------------
 	local apprunner_keys_move = {
 		{
-			{ env.mod }, "k", function() apprunner:down() end,
+			{ env.mod }, "j", function() apprunner:down() end,
 			{ description = "Select next item", group = "Navigation" }
 		},
 		{
-			{ env.mod }, "i", function() apprunner:up() end,
+			{ env.mod }, "k", function() apprunner:up() end,
 			{ description = "Select previous item", group = "Navigation" }
 		},
 	}
@@ -171,19 +179,19 @@ function hotkeys:init(args)
 	------------------------------------------------------------
 	local menu_keys_move = {
 		{
-			{ env.mod }, "k", redflat.menu.action.down,
+			{ }, "j", redflat.menu.action.down,
 			{ description = "Select next item", group = "Navigation" }
 		},
 		{
-			{ env.mod }, "i", redflat.menu.action.up,
+			{ }, "k", redflat.menu.action.up,
 			{ description = "Select previous item", group = "Navigation" }
 		},
 		{
-			{ env.mod }, "j", redflat.menu.action.back,
+			{ }, "h", redflat.menu.action.back,
 			{ description = "Go back", group = "Navigation" }
 		},
 		{
-			{ env.mod }, "l", redflat.menu.action.enter,
+			{ }, "l", redflat.menu.action.enter,
 			{ description = "Open submenu", group = "Navigation" }
 		},
 	}
@@ -194,11 +202,11 @@ function hotkeys:init(args)
 	------------------------------------------------------------
 	local appswitcher_keys_move = {
 		{
-			{ env.mod }, "a", function() appswitcher:switch() end,
+			{ env.mod }, "Tab", function() appswitcher:switch() end,
 			{ description = "Select next app", group = "Navigation" }
 		},
 		{
-			{ env.mod }, "q", function() appswitcher:switch({ reverse = true }) end,
+			{ env.mod, "Shift" }, "Tab", function() appswitcher:switch({ reverse = true }) end,
 			{ description = "Select previous app", group = "Navigation" }
 		},
 	}
@@ -322,42 +330,85 @@ function hotkeys:init(args)
 			{ env.mod }, "Return", function() awful.spawn(env.terminal) end,
 			{ description = "Open a terminal", group = "Main" }
 		},
+		{
+			{ env.mod, "Control" }, "l", function() awful.spawn(env.lock_cmd) end,
+			{ description = "Lock session", group = "Main" }
+		},
+		{
+			{ env.mod, "Control", "Shift" }, "l", function() awful.spawn(env.suspend_cmd) end,
+			{ description = "Suspend session", group = "Main" }
+		},
 
 		{
-			{ env.mod }, "l", focus_switch_byd("right"),
+			{ env.mod }, "h", focus_switch_byd("left"),
 			{ description = "Go to right client", group = "Client focus" }
 		},
 		{
-			{ env.mod }, "j", focus_switch_byd("left"),
-			{ description = "Go to left client", group = "Client focus" }
+			{ env.mod }, "j", focus_switch_byd("down"),
+			{ description = "Go to lower client", group = "Client focus" }
 		},
 		{
-			{ env.mod }, "i", focus_switch_byd("up"),
+			{ env.mod }, "k", focus_switch_byd("up"),
 			{ description = "Go to upper client", group = "Client focus" }
 		},
 		{
-			{ env.mod }, "k", focus_switch_byd("down"),
-			{ description = "Go to lower client", group = "Client focus" }
+			{ env.mod }, "l", focus_switch_byd("right"),
+			{ description = "Go to left client", group = "Client focus" }
 		},
 		{
 			{ env.mod }, "u", awful.client.urgent.jumpto,
 			{ description = "Go to urgent client", group = "Client focus" }
 		},
 		{
-			{ env.mod }, "Tab", focus_to_previous,
-			{ description = "Go to previos client", group = "Client focus" }
+			{ env.mod }, "Tab", focus_to_next,
+			{ description = "Go to previous client", group = "Client focus" }
 		},
+        {
+            { env.mod }, "o",
+            function() awful.screen.focus_relative(1) end,
+            { description = "Focus the next screen", group = "Client focus" }
+        },
+        {
+            { env.mod, "Shift" }, "o",
+            function() awful.screen.focus_relative(-1) end,
+            { description = "Focus the next screen", group = "Client focus" }
+        },
+
+        {
+            { env.mod, "Shift" }, "h",
+            function() awful.client.swap.bydirection('left') end,
+            { description = "Swap with left client", group = "Client movement" }
+        },
+        {
+            { env.mod, "Shift" }, "j",
+            function() awful.client.swap.bydirection('down') end,
+            { description = "Swap with left client", group = "Client movement" }
+        },
+        {
+            { env.mod, "Shift" }, "k",
+            function() awful.client.swap.bydirection('up') end,
+            { description = "Swap with left client", group = "Client movement" }
+        },
+        {
+            { env.mod, "Shift" }, "l",
+            function() awful.client.swap.bydirection('right') end,
+            { description = "Swap with left client", group = "Client movement" }
+        },
 
 		{
 			{ env.mod }, "w", function() mainmenu:show() end,
 			{ description = "Show main menu", group = "Widgets" }
 		},
 		{
-			{ env.mod }, "r", function() apprunner:show() end,
+			{ env.mod, "Shift" }, "p", function() apprunner:show(true) end,
+			{ description = "Application launcher (refresh)", group = "Widgets" }
+		},
+		{
+			{ env.mod }, "p", function() apprunner:show() end,
 			{ description = "Application launcher", group = "Widgets" }
 		},
 		{
-			{ env.mod }, "p", function() redflat.float.prompt:run() end,
+			{ env.mod }, "r", function() redflat.float.prompt:run() end,
 			{ description = "Show the prompt box", group = "Widgets" }
 		},
 		{
@@ -387,11 +438,11 @@ function hotkeys:init(args)
 		},
 
 		{
-			{ env.mod }, "a", nil, function() appswitcher:show({ filter = current }) end,
+			{ env.mod }, "Tab", nil, function() appswitcher:show({ filter = current }) end,
 			{ description = "Switch to next with current tag", group = "Application switcher" }
 		},
 		{
-			{ env.mod }, "q", nil, function() appswitcher:show({ filter = current, reverse = true }) end,
+			{ env.mod, "Shift" }, "Tab", nil, function() appswitcher:show({ filter = current, reverse = true }) end,
 			{ description = "Switch to previous with current tag", group = "Application switcher" }
 		},
 		{
@@ -421,13 +472,50 @@ function hotkeys:init(args)
 			{ description = "Show layout menu", group = "Layouts" }
 		},
 		{
-			{ env.mod }, "Up", function() awful.layout.inc(1) end,
+			{ env.mod }, "Down", function() awful.layout.inc(1) end,
 			{ description = "Select next layout", group = "Layouts" }
 		},
 		{
-			{ env.mod, "Down" }, "Left", function() awful.layout.inc(-1) end,
+			{ env.mod }, "Up", function() awful.layout.inc(-1) end,
 			{ description = "Select previous layout", group = "Layouts" }
 		},
+
+
+        {
+            { }, "XF86MonBrightnessUp",
+            function() brightness({ step = 10 }) end,
+            { description = "Increase brightness", group = "Misc" }
+        },
+        {
+            { }, "XF86MonBrightnessDown",
+            function() brightness({ step = 10, down = true }) end,
+            { description = "Increase brightness", group = "Misc" }
+        },
+
+        {
+            { }, "XF86AudioRaiseVolume",
+            function()
+                redflat.widget.alsa:change_volume({
+                    show_notify = true
+                })
+            end,
+            { description = "Increase volume", group = "Misc" }
+        },
+        {
+            { }, "XF86AudioLowerVolume",
+            function()
+                redflat.widget.alsa:change_volume({
+                    show_notify = true, down = true
+                })
+            end,
+            { description = "Increase volume", group = "Misc" }
+        },
+        {
+            { }, "XF86AudioMute",
+            function() redflat.widget.alsa:mute() end,
+            { description = "Increase volume", group = "Misc" }
+        },
+
 	}
 
 	-- Client keys
@@ -438,7 +526,7 @@ function hotkeys:init(args)
 			{ description = "Toggle fullscreen", group = "Client keys" }
 		},
 		{
-			{ env.mod }, "F4", function(c) c:kill() end,
+			{ env.mod, "Shift" }, "c", function(c) c:kill() end,
 			{ description = "Close", group = "Client keys" }
 		},
 		{
@@ -454,7 +542,8 @@ function hotkeys:init(args)
 			{ description = "Minimize", group = "Client keys" }
 		},
 		{
-			{ env.mod }, "m", function(c) c.maximized = not c.maximized; c:raise() end,
+			{ env.mod }, "m",
+			function(c) c.maximized = not c.maximized; c:raise() end,
 			{ description = "Maximize", group = "Client keys" }
 		}
 	}
@@ -469,10 +558,14 @@ function hotkeys:init(args)
 	for i = 1, 9 do
 		self.keys.root = awful.util.table.join(
 			self.keys.root,
-			tag_numkey(i,    { env.mod },                     function(t) t:view_only()               end),
-			tag_numkey(i,    { env.mod, "Control" },          function(t) awful.tag.viewtoggle(t)     end),
-			client_numkey(i, { env.mod, "Shift" },            function(t) client.focus:move_to_tag(t) end),
-			client_numkey(i, { env.mod, "Control", "Shift" }, function(t) client.focus:toggle_tag(t)  end)
+			tag_numkey(i,    { env.mod },
+			    function(t) awful.tag.viewtoggle(t)     end),
+			tag_numkey(i,    { env.mod, "Control" },
+			    function(t) t:view_only()               end),
+			client_numkey(i, { env.mod, "Shift" },
+			    function(t) client.focus:move_to_tag(t) end),
+			client_numkey(i, { env.mod, "Control", "Shift" },
+			    function(t) client.focus:toggle_tag(t)  end)
 		)
 	end
 
@@ -482,11 +575,11 @@ function hotkeys:init(args)
 	self.fake.numkeys = {
 		{
 			{ env.mod }, "1..9", nil,
-			{ description = "Switch to tag", group = "Numeric keys", keyset = numkeys }
+			{ description = "Toggle tag", group = "Numeric keys", keyset = numkeys }
 		},
 		{
 			{ env.mod, "Control" }, "1..9", nil,
-			{ description = "Toggle tag", group = "Numeric keys", keyset = numkeys }
+			{ description = "Switch to tag", group = "Numeric keys", keyset = numkeys }
 		},
 		{
 			{ env.mod, "Shift" }, "1..9", nil,

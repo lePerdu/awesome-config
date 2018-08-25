@@ -89,7 +89,7 @@ function signals:init(args)
 	-- simple adding signal to restart wm on new monitor pluging.
 	-- For reference, screen-dependent widgets are
 	-- redflat.widget.layoutbox, redflat.widget.taglist, redflat.widget.tasklist
-	screen.connect_signal("list", awesome.restart)
+	-- screen.connect_signal("list", awesome.restart)
 end
 
 -- End
